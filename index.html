@@ -1,0 +1,252 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>So极客</title>
+  <meta name="author" content="kuaner">
+  
+  <meta name="description" content="kuaner'blog on github">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="So极客"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="http://sogeek.tk/atom.xml" title="So极客" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-39087453-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">So极客</a></h1>
+  <h2><a href="/">Apple控，用Android，爱生活，爱分享</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="http://weibo.com/kuaner">@Me</a></li>
+    
+      <li><a href="http://kuaner.tk:9091">Pt</a></li>
+    
+      <li><a href="http://kuaner.gitcafe.com">Mirror</a></li>
+    
+      <li><a href="http://sogeek.tk/atom.xml">Rss</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-03-05T06:46:19.000Z"><a href="/2013/03/05/use_hexo_on_gitcafe/">Mar 5 2013</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/03/05/use_hexo_on_gitcafe/">在gitcafe上使用hexo</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>以前一直很喜欢octpress博客系统,搭配github的pages功能,使用的还挺顺手,就是其基于ruby的部分,让我有时有些头疼,mac上虽然也自带了ruby,配置本地环境的时候还是遇到了不少问题.今天一次还挺偶然的机会,看到了hexo这个静态博客框架,和octpress一样的设计理念,使用git管理静态环境,花了个中午的时间了解了下,以前也从来没有接触过node.js,大概也就是用了差不多2个小时就搞定了整个系统在gitcafe上的部署,由于众所周知的原因,github的访问速度最近让人感觉一直很蛋疼,所以就在国内的同类型服务gitcafe上试着部署了,发现还真不错.</p>
+<p>先总结下hexo on gitcafe的种种优点吧</p>
+<ol>
+<li>hexo命令简单,有英简繁文档,移植了不少octpress插件,页面生成速度快</li>
+<li>markdown语法支持</li>
+<li>gitcafe访问速度快,静态空间免费</li>
+<li>使用git管理,妈妈再也不担心我的文章丢失了</li>
+</ol>
+<p>说了这么多,直接看看该如何来部署好了,我也是第一次接触,总体看来并不困难,当然也只是停留在能用的阶段,知其然还有知其所以然才好.</p>
+<h2>1 本地环境</h2>
+<h3>1.1 homebrew</h3>
+<p>其实node.js也提供了编译好的安装包,或者也可以自己通过源码编译,不过既然有更加方便快捷的homebrew来方便管理安装包,又何乐而不为呢.</p>
+<p><a href="http://mxcl.github.com/homebrew/">homebrew</a>类似于ubuntu上的apt-get 它的安装依赖xcode的command line tools CLT的下载<a href="http://pan.baidu.com/share/link?shareid=312838&amp;uk=3491872603">地址</a> </p>
+<p>安装好CTL后,homebrew的安装就很简单了</p>
+<pre><code><span class="comment">ruby</span> <span class="literal">-</span><span class="comment">e</span> <span class="comment">"$(curl</span> <span class="literal">-</span><span class="comment">fsSL</span> <span class="comment">https://raw</span>.<span class="comment">github</span>.<span class="comment">com/mxcl/homebrew/go)"
+</code></pre>
+<h3>1.2 安装node</h3>
+<p>用homebrew安装node</p>
+<pre><code><span class="title">berw</span> install node
+</code></pre>
+<p>这一步过后node也就被安装在/usr/local下了.第二步是设置环境变量,让/usr/local/bin /usr/local/sbin 的优先级高于系统的.以及npm的环境变量,同样也是在命令行中输入一个命令就可以搞定</p>
+<pre><code>touch ~<span class="regexp">/.bash_profile &amp;&amp; echo "/usr</span><span class="regexp">/local/bin</span><span class="symbol">:/usr/local/sbin</span><span class="symbol">:/usr/local/share/npm/bin</span><span class="symbol">:/usr/bin</span><span class="symbol">:/bin</span><span class="symbol">:/usr/sbin</span><span class="symbol">:/sbin<span class="string">" &gt;&gt; ~/.bash_profile
+</code></pre>
+<p>最好再source一下</p>
+<pre><code><span class="title">source</span> ~/.bash_profile
+</code></pre>
+<p>这样一来就可以通过npm来安装hexo了.</p>
+<h3>1.3 hexo的初始化</h3>
+<p>接着打命令吧</p>
+<pre><code><span class="title">npm</span> install -g hexo
+
+<span class="title">npm</span> update -g
+
+<span class="title">hexo</span> init hexo
+
+<span class="title">cd</span> hexo
+
+<span class="title">hexo</span> new <span class="string">"New Post"</span>
+
+<span class="title">hexo</span> generate
+
+<span class="title">hexo</span> server
+</code></pre>
+<p>执行了hexo server后会在本地的4000端口打开html的服务,这样就可以在本地查看运行状态和调试了.</p>
+<p>hexo的目录也简单,具体的可以看hexo的文档,hexo的作者是台湾同胞,也提供了简体中文文档.</p>
+<p>每次写文章只需要使用markdown编辑器,编辑使用hexo new生成的.md文件,这个文件存在于source/_posts下,Mac下的markdown编辑器,当然就要推荐<a href="http://mouapp.com">Mou</a>这款神器了.我很喜欢.</p>
+<p>这样,本地的环境搭建就完成了.</p>
+<p>hexo的命令支持github的快捷部署,可惜要使用gitcafe提供的服务,所以也没办法享受快捷的命令了,手动也是一样.</p>
+<h2>2 远程环境</h2>
+<h3>2.1 Gitcafe</h3>
+<p>申请账号啥的,就不用赘述了.</p>
+<h3>2.2 安装和设置git</h3>
+<pre><code><span class="title">brew</span> install git
+</code></pre>
+<p>虽然mac中自带了git,谁不喜欢用最新版呢,所以有homebrew还是方便.</p>
+<p>安装好git后,需要设置ssh的密匙,gitcafe上提供了很详细的步骤,<a href="https://gitcafe.com/GitCafe/Help/blob/master/Setup_Git.md">see</a></p>
+<p>从创建SSH密匙开始看就行.</p>
+<h3>2.3 pages服务设置</h3>
+<p>使用pages服务,同样gitcafe也有一个教程,<a href="http://blog.gitcafe.com/116.html">see</a></p>
+<p>大体就是新建一个和gitcafe同用户名的项目就行,比如我的就是kuaner.gitcafe.com 这个地址就是这个pages的地址了</p>
+<h3>2.4 部署</h3>
+<p>部署起来,同样简单,也是几个命令,首先进入hexo的public目录,这便就是需要push到gitcafe的目录了.</p>
+<pre><code><span class="title">git</span> init
+
+<span class="title">git</span> add .
+
+<span class="title">git</span> commit -m <span class="string">"init"</span>
+
+<span class="title">git</span> remote add origin git@gitcafe.com:username/username.git
+
+<span class="title">git</span> checkout -b gitcafe-pages
+
+<span class="title">git</span> push origin gitcafe-pages
+</code></pre>
+<p>需要替换的是username为自己的用户名,以及不要更改分支名gitcafe-pages</p>
+<h2>3 写blog</h2>
+<p>到这里了,实际上也就完成了,起码是已经可以正常使用了,每次添加了新文章后,使用hexo generate生成一下,然后进入public目录</p>
+<pre><code><span class="title">git</span> add . 
+<span class="title">git</span> commit -m <span class="string">"message"</span>
+<span class="title">git</span> push origin gitcafe-pages
+</code></pre>
+<p>就可以了.</p>
+<pre><code><span class="comment">git</span> <span class="comment">commit</span> <span class="literal">-</span><span class="comment">a</span> <span class="literal">-</span><span class="comment">m</span> <span class="comment">"message"</span>
+<span class="comment">git</span> <span class="comment">push</span> <span class="comment">origin</span> <span class="comment">gitcafe</span>-<span class="comment">pages
+</code></pre>
+<p>这样提交也行</p>
+<h3>所以,再有什么,请参看hexo的<a href="http://zespia.tw/hexo/zh-CN/docs">文档</a>吧</h3>
+
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2013/03/05/use_hexo_on_gitcafe/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<nav id="pagination">
+  
+  
+  <div class="clearfix"></div>
+</nav></div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="http://google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:sogeek.tk">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/乱七八糟/">乱七八糟</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 kuaner
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'sogeeker';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
